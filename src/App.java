@@ -1,4 +1,6 @@
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -25,7 +27,17 @@ public class App {
         List<Map<String,String>> listaDeFilmes = parser.parse(body);
         //System.out.println(listaDeFilmes.size()); 
         //exibir e manipular os dados
+        
         for (Map<String,String> filme : listaDeFilmes) {
+            String urlImage = filme.get("image");
+            String titulo = filme.get("title");
+
+            InputStream inputStream = new URL(urlImage).openStream();
+            String nomeArquivo = titulo +".png";
+
+            var GeradoraDeFigurinhas = new GeradoraDeFigurinhas();
+            GeradoraDeFigurinhas.criarFigura(inputStream, nomeArquivo);
+
             System.out.println("\u001b[31m\u001b[1mTitulo:\u001b[m" + "\u001b[32m"+filme.get("title")+"\u001b[m");
             System.out.println("\u001b[1m\u001b[3mLinkImage:\u001b[m" + "\u001b[36m"+filme.get("image")+"\u001b[m");
             // System.out.println(filme.get("imDbRating"));
@@ -34,7 +46,7 @@ public class App {
             int numeroEstrela = (int)classificacao;
             for (int n = 1 ; n <= numeroEstrela; n++) {
                 System.out.print("⭐️");
-                System.out.print("\uD83D\uDC99 💙️");
+               //// System.out.print("\uD83D\uDC99 💙️");
             }
             System.out.println();
         }
